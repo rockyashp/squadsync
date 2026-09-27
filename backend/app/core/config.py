@@ -96,6 +96,14 @@ class Settings(BaseSettings):
     RIOT_DEFAULT_REGION: str = "na"
 
     # --------------------------------------------------------------------------
+    # NewsAPI.org Integration
+    # --------------------------------------------------------------------------
+    NEWS_API_KEY: str | None = None
+    NEWS_API_BASE_URL: str = "https://newsapi.org/v2"
+    # How many hours to consider cached articles still fresh before re-fetching
+    NEWS_CACHE_TTL_HOURS: int = 1
+
+    # --------------------------------------------------------------------------
     # Database Configuration (PostgreSQL / SQLite fallback)
     # --------------------------------------------------------------------------
     POSTGRES_SERVER: str = "localhost"
