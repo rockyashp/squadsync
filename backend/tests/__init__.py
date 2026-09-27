@@ -1,0 +1,3 @@
+"""
+SquadSync Backend Test Suite.
+"""

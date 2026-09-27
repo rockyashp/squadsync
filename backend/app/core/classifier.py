@@ -1,0 +1,46 @@
+from app.core.role_classifier import (
+    BaseRoleClassifier,
+    GamerDNAVector,
+    GamerRoleFeatures,
+    MLRoleClassifier,
+    OfficialGameStats,
+    RoleClassificationConfig,
+    RoleClassificationResult,
+    RuleBasedRoleClassifier,
+    default_classification_config,
+)
+from app.services.classifier import (
+    BaseRoleRule,
+    ClassificationResult,
+    ControllerRule,
+    DuelistRule,
+    LeaderRule,
+    RoleClassifierEngine,
+    SentinelRule,
+    StrategistRule,
+    SupportRule,
+    classifier_engine,
+)
+
+__all__ = [
+    "BaseRoleRule",
+    "ClassificationResult",
+    "RoleClassifierEngine",
+    "classifier_engine",
+    "LeaderRule",
+    "SupportRule",
+    "StrategistRule",
+    "DuelistRule",
+    "SentinelRule",
+    "ControllerRule",
+    # New Modular Engine
+    "BaseRoleClassifier",
+    "GamerDNAVector",
+    "OfficialGameStats",
+    "GamerRoleFeatures",
+    "RoleClassificationResult",
+    "RoleClassificationConfig",
+    "default_classification_config",
+    "RuleBasedRoleClassifier",
+    "MLRoleClassifier",
+]

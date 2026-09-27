@@ -1,0 +1,69 @@
+name: SquadSync CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    name: Pytest Suite & Coverage Verification (PostgreSQL)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: squadsync_user
+          POSTGRES_PASSWORD: squadsync_password
+          POSTGRES_DB: squadsync_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      APP_ENV: testing
+      DEBUG: false
+      SECRET_KEY: test-secret-key-super-secure-for-testing-purposes-only-12345
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REFRESH_TOKEN_EXPIRE_DAYS: 7
+      DATABASE_URL: postgresql+asyncpg://squadsync_user:squadsync_password@localhost:5432/squadsync_test_db
+      TEST_DATABASE_URL: postgresql+asyncpg://squadsync_user:squadsync_password@localhost:5432/squadsync_test_db
+      STEAM_API_KEY: mock_steam_api_key
+      OPENDOTA_API_KEY: mock_opendota_api_key
+      RIOT_API_KEY: RGAPI-mock-key
+      RIOT_CLIENT_ID: mock-client-id
+      RIOT_CLIENT_SECRET: mock-client-secret
+      RIOT_REDIRECT_URI: http://localhost:8000/api/v1/riot/callback
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pytest Suite with PostgreSQL and Coverage
+        run: |
+          pytest --cov=app --cov-report=term-missing --cov-report=xml --cov-fail-under=90 -v
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          if-no-files-found: ignore
